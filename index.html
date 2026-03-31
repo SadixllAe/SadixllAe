@@ -3,21 +3,421 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SAD1X | Official Site</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <title>Free Fire Panel Shop - Продажа Панелей</title>
     <style>
-        body { background-color: #0f172a; color: white; font-family: sans-serif; }
-        .glass { background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.1); }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: #fff;
+            overflow-x: hidden;
+        }
+
+        /* NAVBAR */
+        .navbar {
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(10px);
+            padding: 1.5rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 4px 15px rgba(255, 102, 0, 0.3);
+        }
+
+        .logo {
+            font-size: 2rem;
+            font-weight: bold;
+            background: linear-gradient(45deg, #ff6600, #ffaa00);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: #fff;
+            text-decoration: none;
+            transition: 0.3s;
+            font-weight: 500;
+        }
+
+        .nav-links a:hover {
+            color: #ff6600;
+        }
+
+        .cart-btn {
+            background: linear-gradient(45deg, #ff6600, #ffaa00);
+            padding: 0.8rem 1.5rem;
+            border: none;
+            border-radius: 25px;
+            color: #000;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .cart-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 20px rgba(255, 102, 0, 0.5);
+        }
+
+        /* HERO SECTION */
+        .hero {
+            text-align: center;
+            padding: 6rem 2rem;
+            background: linear-gradient(180deg, rgba(255, 102, 0, 0.1) 0%, transparent 100%);
+        }
+
+        .hero h1 {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            animation: slideDown 0.8s ease;
+        }
+
+        .hero p {
+            font-size: 1.3rem;
+            color: #ccc;
+            margin-bottom: 2rem;
+        }
+
+        .hero-btn {
+            background: linear-gradient(45deg, #ff6600, #ffaa00);
+            padding: 1.2rem 2.5rem;
+            border: none;
+            border-radius: 30px;
+            color: #000;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+            box-shadow: 0 5px 20px rgba(255, 102, 0, 0.4);
+        }
+
+        .hero-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 30px rgba(255, 102, 0, 0.6);
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* PRODUCTS SECTION */
+        .products {
+            padding: 4rem 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .products h2 {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 3rem;
+            color: #ff6600;
+        }
+
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+        }
+
+        .product-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid #ff6600;
+            border-radius: 15px;
+            padding: 1.5rem;
+            text-align: center;
+            transition: 0.3s;
+            cursor: pointer;
+            backdrop-filter: blur(10px);
+        }
+
+        .product-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 10px 30px rgba(255, 102, 0, 0.3);
+            border-color: #ffaa00;
+        }
+
+        .product-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .product-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .product-card p {
+            color: #bbb;
+            margin-bottom: 1.5rem;
+            font-size: 0.95rem;
+        }
+
+        .price {
+            font-size: 1.8rem;
+            color: #ffaa00;
+            font-weight: bold;
+            margin-bottom: 1rem;
+        }
+
+        .buy-btn {
+            background: linear-gradient(45deg, #ff6600, #ffaa00);
+            padding: 0.8rem 1.5rem;
+            border: none;
+            border-radius: 20px;
+            color: #000;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+            width: 100%;
+        }
+
+        .buy-btn:hover {
+            background: linear-gradient(45deg, #ffaa00, #ff6600);
+            transform: scale(1.02);
+        }
+
+        /* FEATURES SECTION */
+        .features {
+            background: rgba(255, 102, 0, 0.05);
+            padding: 4rem 2rem;
+            margin: 2rem 0;
+        }
+
+        .features h2 {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 3rem;
+            color: #ff6600;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .feature-box {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 2rem;
+            border-radius: 10px;
+            text-align: center;
+            border-left: 4px solid #ff6600;
+        }
+
+        .feature-box h3 {
+            color: #ffaa00;
+            margin-bottom: 0.5rem;
+        }
+
+        /* FOOTER */
+        .footer {
+            background: rgba(0, 0, 0, 0.9);
+            padding: 2rem;
+            text-align: center;
+            border-top: 2px solid #ff6600;
+        }
+
+        .footer p {
+            color: #999;
+        }
+
+        .social-links {
+            margin: 1rem 0;
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+        }
+
+        .social-links a {
+            color: #ff6600;
+            text-decoration: none;
+            transition: 0.3s;
+            font-weight: bold;
+        }
+
+        .social-links a:hover {
+            color: #ffaa00;
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .nav-links {
+                gap: 1rem;
+            }
+
+            .products-grid {
+                grid-template-columns: 1fr;
+            }
+        }
     </style>
 </head>
-<body class="flex items-center justify-center h-screen">
-    <div class="glass p-8 rounded-2xl text-center shadow-2xl border-t-2 border-blue-500">
-        <h1 class="text-4xl font-bold mb-4 tracking-tighter">SAD1X_OS</h1>
-        <p class="text-gray-400 mb-6 text-sm">Мощный UI & Android Modding</p>
-        <div class="flex gap-4 justify-center">
-            <button class="bg-blue-600 hover:bg-blue-700 px-6 py-2 rounded-full font-medium transition">Проекты</button>
-            <button class="glass px-6 py-2 rounded-full font-medium hover:bg-white/10 transition">Music</button>
+<body>
+    <!-- NAVBAR -->
+    <nav class="navbar">
+        <div class="logo">🔥 FF Panel Shop</div>
+        <ul class="nav-links">
+            <li><a href="#products">Товары</a></li>
+            <li><a href="#features">Возможности</a></li>
+            <li><a href="#contact">Контакты</a></li>
+        </ul>
+        <button class="cart-btn">🛒 Корзина (0)</button>
+    </nav>
+
+    <!-- HERO SECTION -->
+    <section class="hero">
+        <h1>🎮 Панели для Free Fire</h1>
+        <p>Лучшие панели управления для вашей игры</p>
+        <button class="hero-btn">Начать покупку</button>
+    </section>
+
+    <!-- PRODUCTS SECTION -->
+    <section class="products" id="products">
+        <h2>🏆 Наши Товары</h2>
+        <div class="products-grid">
+            <!-- Product 1 -->
+            <div class="product-card">
+                <div class="product-icon">⚡</div>
+                <h3>Premium Panel</h3>
+                <p>Полная панель управления с всеми функциями</p>
+                <div class="price">499 ₽</div>
+                <button class="buy-btn">Купить</button>
+            </div>
+
+            <!-- Product 2 -->
+            <div class="product-card">
+                <div class="product-icon">💎</div>
+                <h3>Elite Panel</h3>
+                <p>Расширенная панель с приватными функциями</p>
+                <div class="price">799 ₽</div>
+                <button class="buy-btn">Купить</button>
+            </div>
+
+            <!-- Product 3 -->
+            <div class="product-card">
+                <div class="product-icon">👑</div>
+                <h3>VIP Panel</h3>
+                <p>Люкс версия с поддержкой 24/7</p>
+                <div class="price">1299 ₽</div>
+                <button class="buy-btn">Купить</button>
+            </div>
+
+            <!-- Product 4 -->
+            <div class="product-card">
+                <div class="product-icon">🚀</div>
+                <h3>Starter Panel</h3>
+                <p>Базовая панель для новичков</p>
+                <div class="price">199 ₽</div>
+                <button class="buy-btn">Купить</button>
+            </div>
+
+            <!-- Product 5 -->
+            <div class="product-card">
+                <div class="product-icon">🎯</div>
+                <h3>Pro Panel</h3>
+                <p>Профессиональная панель с аналитикой</p>
+                <div class="price">999 ₽</div>
+                <button class="buy-btn">Купить</button>
+            </div>
+
+            <!-- Product 6 -->
+            <div class="product-card">
+                <div class="product-icon">🌟</div>
+                <h3>Ultimate Panel</h3>
+                <p>Самая мощная панель на рынке</p>
+                <div class="price">1999 ₽</div>
+                <button class="buy-btn">Купить</button>
+            </div>
         </div>
-    </div>
+    </section>
+
+    <!-- FEATURES SECTION -->
+    <section class="features" id="features">
+        <h2>✨ Почему выбирают нас?</h2>
+        <div class="features-grid">
+            <div class="feature-box">
+                <h3>⚡ Быстрая доставка</h3>
+                <p>Получите панель за 5 минут после оплаты</p>
+            </div>
+            <div class="feature-box">
+                <h3>🔒 Безопасность</h3>
+                <p>100% защита ваших данных и аккаунта</p>
+            </div>
+            <div class="feature-box">
+                <h3>💬 Поддержка</h3>
+                <p>Помощь 24/7 от нашей команды</p>
+            </div>
+            <div class="feature-box">
+                <h3>🎁 Бонусы</h3>
+                <p>Получайте награды при каждой покупке</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="footer" id="contact">
+        <h3>📞 Свяжитесь с нами</h3>
+        <div class="social-links">
+            <a href="https://discord.gg" target="_blank">Discord</a>
+            <a href="https://t.me" target="_blank">Telegram</a>
+            <a href="https://youtube.com" target="_blank">YouTube</a>
+            <a href="https://vk.com" target="_blank">VK</a>
+        </div>
+        <p>&copy; 2026 FF Panel Shop. Все права защищены. 🔥</p>
+    </footer>
+
+    <script>
+        // Simple cart functionality
+        let cartCount = 0;
+        const cartBtn = document.querySelector('.cart-btn');
+        const buyBtns = document.querySelectorAll('.buy-btn');
+
+        buyBtns.forEach(btn => {
+            btn.addEventListener('click', function() {
+                cartCount++;
+                cartBtn.textContent = `🛒 Корзина (${cartCount})`;
+                alert('Товар добавлен в корзину! ✅');
+            });
+        });
+
+        // Smooth scroll
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                target.scrollIntoView({ behavior: 'smooth' });
+            });
+        });
+    </script>
 </body>
 </html>
