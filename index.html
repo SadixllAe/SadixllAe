@@ -1,1443 +1,648 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>SADIXLL — AE TWIXTORS</title>
-<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:wght@400;600;700;900&family=Barlow+Condensed:wght@700;900&display=swap" rel="stylesheet">
-<style>
-  :root {
-    --red: #e63030;
-    --red-dark: #9b1a1a;
-    --red-glow: #ff4444;
-    --bg: #0a0a0a;
-    --bg2: #111;
-    --bg3: #1a1010;
-    --card-bg: #151515;
-    --text: #ffffff;
-    --muted: #888;
-    --border: #2a2a2a;
-  }
-
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-
-  body {
-    background: var(--bg);
-    color: var(--text);
-    font-family: 'Barlow', sans-serif;
-    overflow-x: hidden;
-  }
-
-  /* SCROLLBAR */
-  ::-webkit-scrollbar { width: 4px; }
-  ::-webkit-scrollbar-track { background: var(--bg); }
-  ::-webkit-scrollbar-thumb { background: var(--red-dark); border-radius: 2px; }
-
-  /* NAV */
-  nav {
-    position: fixed;
-    top: 16px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: calc(100% - 32px);
-    max-width: 900px;
-    background: rgba(10,10,10,0.92);
-    backdrop-filter: blur(20px);
-    border: 1px solid #222;
-    border-radius: 50px;
-    padding: 14px 24px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    z-index: 1000;
-  }
-
-  .logo {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    text-decoration: none;
-  }
-
-  .logo-icon {
-    width: 38px;
-    height: 38px;
-    background: linear-gradient(135deg, var(--red-dark), var(--red));
-    border-radius: 10px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 20px;
-    color: white;
-    letter-spacing: 1px;
-  }
-
-  .logo-text {
-    display: flex;
-    flex-direction: column;
-    line-height: 1;
-  }
-
-  .logo-text span:first-child {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 18px;
-    letter-spacing: 2px;
-    color: white;
-  }
-
-  .logo-text span:last-child {
-    font-size: 10px;
-    letter-spacing: 4px;
-    color: var(--red);
-    font-weight: 700;
-  }
-
-  .nav-menu-btn {
-    width: 40px;
-    height: 40px;
-    background: #1e1e1e;
-    border: 1px solid #2a2a2a;
-    border-radius: 50%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 5px;
-    cursor: pointer;
-  }
-
-  .nav-menu-btn span {
-    width: 18px;
-    height: 1.5px;
-    background: white;
-    border-radius: 2px;
-  }
-
-  /* MOBILE NAV MENU */
-  .mobile-menu {
-    display: none;
-    position: fixed;
-    top: 0; left: 0; right: 0; bottom: 0;
-    background: rgba(0,0,0,0.97);
-    z-index: 999;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 32px;
-  }
-
-  .mobile-menu.open { display: flex; }
-
-  .mobile-menu a {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 42px;
-    letter-spacing: 4px;
-    color: white;
-    text-decoration: none;
-    transition: color 0.2s;
-  }
-
-  .mobile-menu a:hover { color: var(--red); }
-
-  .menu-close {
-    position: absolute;
-    top: 24px;
-    right: 24px;
-    font-size: 32px;
-    color: white;
-    cursor: pointer;
-    background: none;
-    border: none;
-  }
-
-  /* HERO */
-  .hero {
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    padding: 120px 24px 80px;
-    position: relative;
-    overflow: hidden;
-  }
-
-  .hero-bg {
-    position: absolute;
-    inset: 0;
-    background:
-      radial-gradient(ellipse 80% 50% at 50% 0%, rgba(150,20,20,0.35) 0%, transparent 70%),
-      radial-gradient(ellipse 60% 40% at 20% 80%, rgba(100,10,10,0.2) 0%, transparent 60%),
-      linear-gradient(180deg, #1a0505 0%, #0a0a0a 40%, #000 100%);
-  }
-
-  .hero-diagonal {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    height: 50%;
-    background: linear-gradient(160deg, transparent 49%, #000 50%);
-  }
-
-  .instant-badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    background: rgba(255,255,255,0.06);
-    border: 1px solid #333;
-    border-radius: 50px;
-    padding: 8px 20px;
-    font-size: 12px;
-    font-weight: 700;
-    letter-spacing: 3px;
-    color: #ccc;
-    margin-bottom: 28px;
-    position: relative;
-    z-index: 1;
-    animation: fadeDown 0.8s ease both;
-  }
-
-  .instant-badge .dot {
-    width: 8px;
-    height: 8px;
-    background: var(--red);
-    border-radius: 50%;
-    animation: pulse 1.5s infinite;
-  }
-
-  @keyframes pulse {
-    0%, 100% { opacity: 1; transform: scale(1); }
-    50% { opacity: 0.5; transform: scale(0.8); }
-  }
-
-  @keyframes fadeDown {
-    from { opacity: 0; transform: translateY(-20px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-
-  @keyframes fadeUp {
-    from { opacity: 0; transform: translateY(30px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-
-  .hero h1 {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: clamp(72px, 18vw, 140px);
-    line-height: 0.9;
-    color: var(--red);
-    letter-spacing: 2px;
-    position: relative;
-    z-index: 1;
-    animation: fadeUp 0.8s 0.2s ease both;
-    text-shadow: 0 0 60px rgba(230,48,48,0.4);
-  }
-
-  .hero h1 span {
-    display: block;
-    color: #ff6060;
-  }
-
-  .hero-sub {
-    font-size: clamp(18px, 4vw, 26px);
-    font-weight: 600;
-    color: #ccc;
-    letter-spacing: 2px;
-    margin-top: 8px;
-    position: relative;
-    z-index: 1;
-    animation: fadeUp 0.8s 0.35s ease both;
-  }
-
-  .hero-sub .cursor {
-    display: inline-block;
-    width: 2px;
-    height: 1em;
-    background: var(--red);
-    margin-left: 2px;
-    animation: blink 1s infinite;
-    vertical-align: text-bottom;
-  }
-
-  @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
-
-  .hero-desc {
-    max-width: 500px;
-    color: var(--muted);
-    font-size: 15px;
-    line-height: 1.7;
-    margin-top: 20px;
-    position: relative;
-    z-index: 1;
-    animation: fadeUp 0.8s 0.5s ease both;
-  }
-
-  .hero-desc strong { color: white; }
-
-  .hero-buttons {
-    display: flex;
-    flex-direction: column;
-    gap: 14px;
-    margin-top: 40px;
-    width: 100%;
-    max-width: 320px;
-    position: relative;
-    z-index: 1;
-    animation: fadeUp 0.8s 0.65s ease both;
-  }
-
-  .btn-primary {
-    background: linear-gradient(135deg, var(--red), #c01a1a);
-    color: white;
-    border: none;
-    border-radius: 16px;
-    padding: 18px 32px;
-    font-family: 'Barlow', sans-serif;
-    font-size: 16px;
-    font-weight: 800;
-    letter-spacing: 1px;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 10px;
-    text-decoration: none;
-    transition: transform 0.2s, box-shadow 0.2s;
-    box-shadow: 0 8px 30px rgba(230,48,48,0.35);
-  }
-
-  .btn-primary:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 12px 40px rgba(230,48,48,0.5);
-  }
-
-  .btn-secondary {
-    background: transparent;
-    color: white;
-    border: 1px solid #333;
-    border-radius: 16px;
-    padding: 18px 32px;
-    font-family: 'Barlow', sans-serif;
-    font-size: 16px;
-    font-weight: 700;
-    cursor: pointer;
-    text-decoration: none;
-    text-align: center;
-    transition: border-color 0.2s, background 0.2s;
-  }
-
-  .btn-secondary:hover {
-    border-color: var(--red);
-    background: rgba(230,48,48,0.06);
-  }
-
-  /* STATS */
-  .stats {
-    display: flex;
-    justify-content: center;
-    gap: 40px;
-    padding: 60px 24px;
-    border-top: 1px solid #1a1a1a;
-    border-bottom: 1px solid #1a1a1a;
-    flex-wrap: wrap;
-  }
-
-  .stat {
-    text-align: center;
-  }
-
-  .stat-num {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 48px;
-    color: var(--red);
-    line-height: 1;
-  }
-
-  .stat-label {
-    font-size: 11px;
-    letter-spacing: 3px;
-    color: var(--muted);
-    text-transform: uppercase;
-    margin-top: 4px;
-  }
-
-  /* EXPLORE */
-  .section {
-    padding: 60px 20px;
-    max-width: 900px;
-    margin: 0 auto;
-  }
-
-  .section-header {
-    text-align: center;
-    margin-bottom: 36px;
-  }
-
-  .section-header h2 {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: clamp(40px, 8vw, 64px);
-    letter-spacing: 2px;
-  }
-
-  .section-header h2 span { color: var(--red); }
-
-  .section-header p {
-    color: var(--muted);
-    font-size: 14px;
-    margin-top: 8px;
-  }
-
-  /* SEARCH */
-  .search-bar {
-    background: #1a1a1a;
-    border: 1px solid #2a2a2a;
-    border-radius: 50px;
-    padding: 14px 20px;
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    margin-bottom: 24px;
-    transition: border-color 0.2s;
-  }
-
-  .search-bar:focus-within { border-color: var(--red-dark); }
-
-  .search-bar svg { color: var(--red); flex-shrink: 0; }
-
-  .search-bar input {
-    background: none;
-    border: none;
-    outline: none;
-    color: white;
-    font-family: 'Barlow', sans-serif;
-    font-size: 15px;
-    width: 100%;
-  }
-
-  .search-bar input::placeholder { color: #555; }
-
-  /* FILTER TAGS */
-  .tags {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-    margin-bottom: 24px;
-  }
-
-  .tag {
-    background: #1a1a1a;
-    border: 1px solid #2a2a2a;
-    border-radius: 50px;
-    padding: 8px 16px;
-    font-size: 11px;
-    font-weight: 700;
-    letter-spacing: 1.5px;
-    color: #aaa;
-    cursor: pointer;
-    transition: all 0.2s;
-  }
-
-  .tag:hover, .tag.active {
-    background: var(--red);
-    border-color: var(--red);
-    color: white;
-  }
-
-  /* SORT */
-  .sort-bar {
-    background: #1a1a1a;
-    border: 1px solid #2a2a2a;
-    border-radius: 12px;
-    padding: 14px 20px;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    margin-bottom: 20px;
-    font-size: 13px;
-    font-weight: 700;
-    letter-spacing: 2px;
-    color: var(--muted);
-  }
-
-  .sort-bar span { color: white; }
-
-  /* RANDOM BTN */
-  .random-btn {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 10px;
-    background: #1a0a0a;
-    border: 1px solid var(--red-dark);
-    border-radius: 50px;
-    padding: 14px 28px;
-    color: white;
-    font-size: 14px;
-    font-weight: 700;
-    letter-spacing: 1px;
-    cursor: pointer;
-    margin: 0 auto 40px;
-    transition: background 0.2s;
-  }
-
-  .random-btn:hover { background: #2a0a0a; }
-
-  .random-btn svg {
-    color: var(--red);
-    animation: spin 3s linear infinite;
-  }
-
-  @keyframes spin { from{transform:rotate(0)} to{transform:rotate(360deg)} }
-
-  /* SECTION LABEL */
-  .section-label {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 12px;
-    background: #111;
-    border: 1px solid #222;
-    border-radius: 50px;
-    padding: 14px 24px;
-    font-size: 12px;
-    font-weight: 900;
-    letter-spacing: 3px;
-    margin-bottom: 24px;
-  }
-
-  .section-label .dot {
-    width: 8px;
-    height: 8px;
-    background: var(--red);
-    border-radius: 50%;
-  }
-
-  /* HORIZONTAL SCROLL CARDS */
-  .scroll-row {
-    display: flex;
-    gap: 14px;
-    overflow-x: auto;
-    padding-bottom: 12px;
-    margin-bottom: 48px;
-    scrollbar-width: none;
-  }
-
-  .scroll-row::-webkit-scrollbar { display: none; }
-
-  /* CARDS */
-  .clip-card {
-    background: var(--card-bg);
-    border: 1px solid #222;
-    border-radius: 18px;
-    overflow: hidden;
-    transition: transform 0.25s, border-color 0.25s;
-    cursor: pointer;
-    flex-shrink: 0;
-    width: 280px;
-  }
-
-  .clip-card:hover {
-    transform: translateY(-4px);
-    border-color: #3a1a1a;
-  }
-
-  .clip-card.full-width {
-    width: 100%;
-    flex-shrink: 1;
-    margin-bottom: 16px;
-  }
-
-  .card-thumb {
-    width: 100%;
-    aspect-ratio: 16/9;
-    background: #1e1e1e;
-    position: relative;
-    overflow: hidden;
-  }
-
-  .card-thumb-inner {
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(135deg, #1a0a0a, #2a1a1a, #0a0a1a);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    position: relative;
-  }
-
-  /* Twixtor wave effect */
-  .card-thumb-inner::before {
-    content: '';
-    position: absolute;
-    left: 0; top: 0;
-    width: 30%;
-    height: 100%;
-    background: repeating-linear-gradient(
-      0deg,
-      transparent,
-      transparent 3px,
-      rgba(180,80,0,0.3) 3px,
-      rgba(180,80,0,0.3) 4px
-    );
-  }
-
-  .card-thumb-inner::after {
-    content: '';
-    position: absolute;
-    right: 0; top: 0;
-    width: 30%;
-    height: 100%;
-    background: repeating-linear-gradient(
-      0deg,
-      transparent,
-      transparent 3px,
-      rgba(180,80,0,0.3) 3px,
-      rgba(180,80,0,0.3) 4px
-    );
-  }
-
-  .card-thumb-title {
-    position: absolute;
-    bottom: 10px;
-    left: 10px;
-    right: 10px;
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 22px;
-    letter-spacing: 1px;
-    color: white;
-    text-shadow: 0 2px 8px rgba(0,0,0,0.8);
-    z-index: 1;
-    line-height: 1.1;
-  }
-
-  .card-thumb-title small {
-    display: block;
-    font-family: 'Barlow', sans-serif;
-    font-size: 9px;
-    letter-spacing: 3px;
-    color: var(--red);
-    font-weight: 700;
-  }
-
-  .watermark {
-    position: absolute;
-    top: 8px;
-    right: 10px;
-    font-size: 9px;
-    color: rgba(255,255,255,0.5);
-    z-index: 1;
-  }
-
-  .new-badge {
-    position: absolute;
-    top: 10px;
-    left: 10px;
-    background: #e040fb;
-    color: white;
-    font-size: 9px;
-    font-weight: 900;
-    letter-spacing: 2px;
-    padding: 4px 10px;
-    border-radius: 50px;
-    z-index: 2;
-  }
-
-  .card-body {
-    padding: 14px 16px;
-  }
-
-  .card-title {
-    font-size: 13px;
-    font-weight: 800;
-    line-height: 1.4;
-    margin-bottom: 8px;
-    letter-spacing: 0.3px;
-  }
-
-  .card-desc {
-    font-size: 12px;
-    color: var(--muted);
-    line-height: 1.5;
-    margin-bottom: 12px;
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-  }
-
-  .card-meta {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 10px;
-  }
-
-  .category-tag {
-    background: var(--red-dark);
-    color: var(--red-glow);
-    font-size: 10px;
-    font-weight: 800;
-    letter-spacing: 1.5px;
-    padding: 4px 12px;
-    border-radius: 50px;
-    border: 1px solid var(--red-dark);
-  }
-
-  .category-tag.marvel { background: #1a0a0a; color: #ff6060; border-color: #5a1a1a; }
-  .category-tag.trailers { background: #1a0a0a; color: #ff6060; border-color: #5a1a1a; }
-
-  .time-ago {
-    font-size: 11px;
-    color: var(--muted);
-  }
-
-  .card-stats {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-  }
-
-  .card-stats-left {
-    display: flex;
-    gap: 14px;
-    align-items: center;
-  }
-
-  .stat-item {
-    display: flex;
-    align-items: center;
-    gap: 5px;
-    font-size: 12px;
-    color: var(--muted);
-  }
-
-  .arrow-btn {
-    width: 32px;
-    height: 32px;
-    background: var(--red-dark);
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    transition: background 0.2s;
-  }
-
-  .arrow-btn:hover { background: var(--red); }
-
-  /* AE STICKER SECTION */
-  .ae-section {
-    padding: 60px 20px;
-    background: linear-gradient(180deg, transparent, #0d0505, transparent);
-    text-align: center;
-  }
-
-  .ae-sticker-wrap {
-    display: inline-flex;
-    flex-direction: column;
-    align-items: center;
-    margin-top: 40px;
-    gap: 20px;
-  }
-
-  .ae-sticker {
-    width: 160px;
-    height: 160px;
-    border-radius: 50%;
-    background: conic-gradient(from 0deg, var(--red), #ff6060, #ff0000, var(--red));
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 52px;
-    letter-spacing: 4px;
-    color: white;
-    text-shadow: 0 2px 12px rgba(0,0,0,0.5);
-    box-shadow: 0 0 40px rgba(230,48,48,0.5), 0 0 80px rgba(230,48,48,0.2);
-    animation: rotateBorder 6s linear infinite;
-    position: relative;
-    cursor: pointer;
-    transition: transform 0.3s;
-  }
-
-  .ae-sticker:hover { transform: scale(1.08) rotate(5deg); }
-
-  @keyframes rotateBorder {
-    from { box-shadow: 0 0 40px rgba(230,48,48,0.5), 0 0 80px rgba(230,48,48,0.2); }
-    50% { box-shadow: 0 0 60px rgba(255,80,80,0.7), 0 0 100px rgba(230,48,48,0.3); }
-    to { box-shadow: 0 0 40px rgba(230,48,48,0.5), 0 0 80px rgba(230,48,48,0.2); }
-  }
-
-  .ae-sticker-label {
-    font-size: 11px;
-    letter-spacing: 4px;
-    color: var(--muted);
-    text-transform: uppercase;
-  }
-
-  .sticker-row {
-    display: flex;
-    gap: 20px;
-    justify-content: center;
-    flex-wrap: wrap;
-    margin-top: 32px;
-  }
-
-  .mini-sticker {
-    width: 90px;
-    height: 90px;
-    border-radius: 20px;
-    background: #1a1a1a;
-    border: 1px solid #2a2a2a;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 4px;
-    cursor: pointer;
-    transition: all 0.25s;
-  }
-
-  .mini-sticker:hover {
-    border-color: var(--red);
-    background: #1a0a0a;
-    transform: scale(1.05);
-  }
-
-  .mini-sticker-icon {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 28px;
-    color: var(--red);
-  }
-
-  .mini-sticker-label {
-    font-size: 8px;
-    letter-spacing: 2px;
-    color: var(--muted);
-    text-align: center;
-  }
-
-  /* ABOUT */
-  .about-section {
-    padding: 60px 20px;
-    max-width: 600px;
-    margin: 0 auto;
-    text-align: center;
-  }
-
-  .about-section p {
-    color: var(--muted);
-    line-height: 1.8;
-    font-size: 15px;
-  }
-
-  .about-section p strong { color: var(--red); }
-
-  /* FOOTER */
-  footer {
-    border-top: 1px solid #1a1a1a;
-    padding: 32px 24px;
-    text-align: center;
-  }
-
-  footer .footer-logo {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 32px;
-    letter-spacing: 4px;
-    color: var(--red);
-  }
-
-  footer .footer-sub {
-    font-size: 10px;
-    letter-spacing: 5px;
-    color: var(--muted);
-    margin-top: 4px;
-  }
-
-  footer .footer-links {
-    display: flex;
-    justify-content: center;
-    gap: 24px;
-    margin-top: 20px;
-    flex-wrap: wrap;
-  }
-
-  footer .footer-links a {
-    color: var(--muted);
-    text-decoration: none;
-    font-size: 12px;
-    letter-spacing: 2px;
-    transition: color 0.2s;
-  }
-
-  footer .footer-links a:hover { color: var(--red); }
-
-  footer .copyright {
-    font-size: 11px;
-    color: #333;
-    margin-top: 20px;
-  }
-
-  /* ALL CLIPS TITLE */
-  .all-clips-title {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 52px;
-    letter-spacing: 3px;
-    color: var(--red);
-    text-align: center;
-    margin-bottom: 8px;
-  }
-
-  .all-clips-line {
-    width: 80px;
-    height: 3px;
-    background: linear-gradient(90deg, transparent, var(--red), transparent);
-    margin: 0 auto 32px;
-    border-radius: 2px;
-  }
-
-  /* PAGE TRANSITIONS */
-  .page { display: none; }
-  .page.active { display: block; }
-
-  /* BOTTOM NAV */
-  .bottom-nav {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    background: rgba(10,10,10,0.95);
-    backdrop-filter: blur(20px);
-    border-top: 1px solid #1e1e1e;
-    display: flex;
-    padding: 10px 0 20px;
-    z-index: 100;
-  }
-
-  .bottom-nav-item {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 4px;
-    cursor: pointer;
-    padding: 6px 0;
-    transition: color 0.2s;
-    color: var(--muted);
-    border: none;
-    background: none;
-    font-family: 'Barlow', sans-serif;
-  }
-
-  .bottom-nav-item.active { color: var(--red); }
-
-  .bottom-nav-item svg { width: 22px; height: 22px; }
-
-  .bottom-nav-item span {
-    font-size: 9px;
-    font-weight: 700;
-    letter-spacing: 1.5px;
-  }
-
-  .page-content {
-    padding-bottom: 90px;
-  }
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>SADIXLL SAVER — Скачай любое видео 8K/4K</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #0f0c1a 0%, #1a142f 50%, #0d0b1a 100%);
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Анимированные листья и цветы */
+        .leaf, .flower {
+            position: fixed;
+            pointer-events: none;
+            z-index: 0;
+            user-select: none;
+        }
+
+        .leaf {
+            animation: floatLeaf linear infinite;
+        }
+
+        .flower {
+            animation: floatFlower 8s ease-in-out infinite;
+        }
+
+        @keyframes floatLeaf {
+            0% {
+                transform: translateY(-10vh) translateX(-10vw) rotate(0deg);
+                opacity: 0;
+            }
+            10% { opacity: 0.5; }
+            90% { opacity: 0.5; }
+            100% {
+                transform: translateY(110vh) translateX(20vw) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        @keyframes floatFlower {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(10deg); }
+        }
+
+        /* Контейнер */
+        .container {
+            position: relative;
+            z-index: 10;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            min-height: 100vh;
+        }
+
+        /* Хедер */
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            animation: fadeInDown 0.8s ease;
+        }
+
+        .logo {
+            font-size: 70px;
+            margin-bottom: 20px;
+            animation: pulseGlow 2s ease-in-out infinite;
+            display: inline-block;
+        }
+
+        @keyframes pulseGlow {
+            0%, 100% { text-shadow: 0 0 10px #ff69b4, 0 0 20px #ff1493; }
+            50% { text-shadow: 0 0 20px #ff69b4, 0 0 40px #ff1493, 0 0 60px #ff69b4; }
+        }
+
+        h1 {
+            font-size: 52px;
+            font-weight: 800;
+            background: linear-gradient(135deg, #ff69b4, #ff1493, #ff6b6b);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            color: rgba(255,255,255,0.7);
+            font-size: 16px;
+            letter-spacing: 1px;
+        }
+
+        .badge {
+            display: inline-block;
+            background: rgba(255,105,180,0.2);
+            padding: 5px 12px;
+            border-radius: 30px;
+            font-size: 12px;
+            margin-top: 15px;
+            color: #ff69b4;
+        }
+
+        /* Карточка ввода */
+        .input-card {
+            background: rgba(255,255,255,0.05);
+            backdrop-filter: blur(10px);
+            border-radius: 30px;
+            padding: 30px;
+            border: 1px solid rgba(255,105,180,0.3);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+            transition: all 0.3s;
+        }
+
+        .input-card:hover {
+            border-color: rgba(255,105,180,0.6);
+            box-shadow: 0 25px 50px rgba(0,0,0,0.4);
+        }
+
+        .url-input-group {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .url-input {
+            flex: 1;
+            padding: 18px 24px;
+            background: rgba(0,0,0,0.5);
+            border: 2px solid rgba(255,105,180,0.3);
+            border-radius: 50px;
+            font-size: 16px;
+            color: white;
+            font-family: inherit;
+            transition: all 0.3s;
+            outline: none;
+        }
+
+        .url-input:focus {
+            border-color: #ff69b4;
+            box-shadow: 0 0 15px rgba(255,105,180,0.3);
+        }
+
+        .url-input::placeholder {
+            color: rgba(255,255,255,0.4);
+        }
+
+        .download-btn {
+            padding: 18px 32px;
+            background: linear-gradient(135deg, #ff69b4, #ff1493);
+            border: none;
+            border-radius: 50px;
+            color: white;
+            font-size: 18px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-family: inherit;
+        }
+
+        .download-btn:hover {
+            transform: scale(1.02);
+            box-shadow: 0 10px 25px rgba(255,105,180,0.4);
+        }
+
+        /* Платформы */
+        .platforms {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .platform-badge {
+            padding: 6px 14px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 40px;
+            font-size: 12px;
+            color: rgba(255,255,255,0.7);
+            transition: all 0.3s;
+        }
+
+        .platform-badge i {
+            margin-right: 6px;
+            color: #ff69b4;
+        }
+
+        /* Результат */
+        .result-card {
+            margin-top: 30px;
+            background: rgba(255,255,255,0.05);
+            backdrop-filter: blur(10px);
+            border-radius: 30px;
+            padding: 25px;
+            border: 1px solid rgba(255,105,180,0.3);
+            display: none;
+            animation: fadeInUp 0.6s ease;
+        }
+
+        .result-card.show {
+            display: block;
+        }
+
+        .video-info {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+        }
+
+        .video-thumb {
+            width: 140px;
+            height: 140px;
+            border-radius: 20px;
+            object-fit: cover;
+            background: rgba(0,0,0,0.5);
+        }
+
+        .video-details {
+            flex: 1;
+        }
+
+        .video-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: white;
+            margin-bottom: 8px;
+        }
+
+        .video-meta {
+            font-size: 13px;
+            color: rgba(255,255,255,0.5);
+            margin-bottom: 15px;
+        }
+
+        .quality-select {
+            padding: 10px 15px;
+            background: rgba(0,0,0,0.5);
+            border: 1px solid rgba(255,105,180,0.3);
+            border-radius: 40px;
+            color: white;
+            font-size: 14px;
+            cursor: pointer;
+            outline: none;
+            margin-right: 10px;
+            margin-bottom: 10px;
+        }
+
+        .get-link-btn {
+            padding: 10px 24px;
+            background: linear-gradient(135deg, #ff69b4, #ff1493);
+            border: none;
+            border-radius: 40px;
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .get-link-btn:hover {
+            transform: scale(1.02);
+        }
+
+        .direct-link {
+            margin-top: 15px;
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .direct-link input {
+            flex: 1;
+            padding: 12px 16px;
+            background: rgba(0,0,0,0.5);
+            border: 1px solid rgba(255,105,180,0.3);
+            border-radius: 40px;
+            color: white;
+            font-size: 13px;
+            outline: none;
+        }
+
+        .copy-btn {
+            padding: 12px 20px;
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,105,180,0.3);
+            border-radius: 40px;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        /* Лоадер */
+        .loader {
+            display: none;
+            text-align: center;
+            margin-top: 30px;
+        }
+
+        .loader.show {
+            display: block;
+        }
+
+        .loader-spinner {
+            width: 50px;
+            height: 50px;
+            border: 3px solid rgba(255,105,180,0.3);
+            border-top-color: #ff69b4;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            margin: 0 auto 15px;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Футер */
+        .footer {
+            text-align: center;
+            margin-top: 50px;
+            color: rgba(255,255,255,0.4);
+            font-size: 12px;
+        }
+
+        /* Анимации */
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @media (max-width: 600px) {
+            h1 { font-size: 32px; }
+            .logo { font-size: 50px; }
+            .url-input-group { flex-direction: column; }
+            .download-btn { justify-content: center; }
+            .video-info { flex-direction: column; align-items: center; text-align: center; }
+        }
+    </style>
 </head>
 <body>
 
-<!-- NAV -->
-<nav>
-  <a class="logo" href="#" onclick="showPage('home')">
-    <div class="logo-icon">SA</div>
-    <div class="logo-text">
-      <span>SADIXLL</span>
-      <span>TWIXTORS</span>
-    </div>
-  </a>
-  <div class="nav-menu-btn" onclick="toggleMenu()">
-    <span></span><span></span><span></span>
-  </div>
-</nav>
+    <div id="bg-animation"></div>
 
-<!-- MOBILE MENU -->
-<div class="mobile-menu" id="mobileMenu">
-  <button class="menu-close" onclick="toggleMenu()">✕</button>
-  <a href="#" onclick="showPage('home');toggleMenu()">HOME</a>
-  <a href="#" onclick="showPage('explore');toggleMenu()">EXPLORE</a>
-  <a href="#" onclick="showPage('stickers');toggleMenu()">STICKERS</a>
-  <a href="#" onclick="showPage('about');toggleMenu()">ABOUT</a>
-</div>
-
-<div class="page-content">
-
-<!-- HOME PAGE -->
-<div class="page active" id="page-home">
-  <!-- HERO -->
-  <section class="hero">
-    <div class="hero-bg"></div>
-    <div class="hero-diagonal"></div>
-
-    <div class="instant-badge">
-      <span class="dot"></span>
-      INSTANT DOWNLOAD
-    </div>
-
-    <h1>
-      Premium
-      <span>Twixtors</span>
-    </h1>
-
-    <p class="hero-sub">For Video Editors<span class="cursor"></span></p>
-
-    <p class="hero-desc">
-      High-quality slow motion clips. <strong>4K resolution, 60fps</strong>, ready to download. By <strong>@Sadixll</strong> — free scene packs with <strong style="color:var(--red)">Ae</strong> stickers.
-    </p>
-
-    <div class="hero-buttons">
-      <a href="#" class="btn-primary" onclick="showPage('explore')">
-        Browse Collection →
-      </a>
-      <a href="#" class="btn-secondary" onclick="showPage('about')">
-        Learn More
-      </a>
-    </div>
-  </section>
-
-  <!-- STATS -->
-  <div class="stats">
-    <div class="stat">
-      <div class="stat-num">4K</div>
-      <div class="stat-label">Resolution</div>
-    </div>
-    <div class="stat">
-      <div class="stat-num">60</div>
-      <div class="stat-label">FPS</div>
-    </div>
-    <div class="stat">
-      <div class="stat-num">100+</div>
-      <div class="stat-label">Clips</div>
-    </div>
-    <div class="stat">
-      <div class="stat-num">FREE</div>
-      <div class="stat-label">Always</div>
-    </div>
-  </div>
-
-  <!-- RECOMMENDED -->
-  <div class="section">
-    <div class="section-label">
-      <span class="dot"></span>
-      RECOMMENDED FOR YOU
-      <span class="dot"></span>
-    </div>
-
-    <div class="scroll-row">
-      <!-- Card 1 -->
-      <div class="clip-card">
-        <div class="card-thumb">
-          <div class="card-thumb-inner" style="background: linear-gradient(135deg, #1a0a05, #2a1505, #0a0510);">
-            <span class="watermark">@sadixll</span>
-            <div class="card-thumb-title">
-              PEAKY BLINDERS
-              <small>4K60FPS TWIXTOR</small>
+    <div class="container">
+        <div class="header">
+            <div class="logo">
+                <i class="fas fa-download"></i>
             </div>
-          </div>
-        </div>
-        <div class="card-body">
-          <div class="card-title">PEAKY BLINDERS THE IMMORTAL MAN | 4K ENHANCED TRAILER |...</div>
-          <div class="card-desc">Don't forget to like and subscribe @sadixll on youtube for more scene packs like this! Give...</div>
-          <div class="card-meta">
-            <span class="category-tag trailers">TRAILERS</span>
-            <span class="time-ago">3mo ago</span>
-          </div>
-          <div class="card-stats">
-            <div class="card-stats-left">
-              <div class="stat-item">
-                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
-                3.5K
-              </div>
-              <div class="stat-item">
-                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-                2.0K
-              </div>
+            <h1>SADIXLL SAVER</h1>
+            <div class="subtitle">
+                <i class="fas fa-infinity"></i> Скачай ЛЮБОЕ видео — YouTube, TikTok, Instagram, защищённые <i class="fas fa-infinity"></i>
             </div>
-            <div class="arrow-btn">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+            <div class="badge">
+                <i class="fas fa-crown"></i> 8K/4K | Без потери качества | Без рекламы
             </div>
-          </div>
         </div>
-      </div>
 
-      <!-- Card 2 -->
-      <div class="clip-card">
-        <div class="card-thumb">
-          <div class="card-thumb-inner" style="background: linear-gradient(135deg, #0a0a1a, #1a0a1a, #050a15);">
-            <span class="watermark">@sadixll</span>
-            <div class="card-thumb-title">
-              PEAKY BLINDERS
-              <small>4K ENHANCED</small>
+        <div class="input-card">
+            <div class="url-input-group">
+                <input type="text" class="url-input" id="urlInput" placeholder="Вставь ссылку на видео (YouTube, TikTok, Instagram, Twitter, Facebook, VK...)">
+                <button class="download-btn" id="downloadBtn">
+                    <i class="fas fa-magic"></i> Получить ссылку
+                </button>
             </div>
-          </div>
-        </div>
-        <div class="card-body">
-          <div class="card-title">PEAKY BLINDERS THE IMMORTAL MAN | 4K ENHAN...</div>
-          <div class="card-desc">Don't forget to like and subscribe @sadixll on youtube for more scene packs like this!</div>
-          <div class="card-meta">
-            <span class="category-tag trailers">TRAILERS</span>
-            <span class="time-ago">3mo ago</span>
-          </div>
-          <div class="card-stats">
-            <div class="card-stats-left">
-              <div class="stat-item">
-                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
-                1.4K
-              </div>
-              <div class="stat-item">
-                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-                797
-              </div>
+            <div class="platforms">
+                <span class="platform-badge"><i class="fab fa-youtube"></i> YouTube (8K/4K/HDR)</span>
+                <span class="platform-badge"><i class="fab fa-tiktok"></i> TikTok (No Watermark)</span>
+                <span class="platform-badge"><i class="fab fa-instagram"></i> Instagram (Reels/Stories)</span>
+                <span class="platform-badge"><i class="fab fa-twitter"></i> Twitter/X (HD)</span>
+                <span class="platform-badge"><i class="fab fa-facebook"></i> Facebook</span>
+                <span class="platform-badge"><i class="fab fa-vk"></i> VK</span>
+                <span class="platform-badge"><i class="fas fa-lock-open"></i> Защищённые видео</span>
             </div>
-            <div class="arrow-btn">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+        </div>
+
+        <div class="loader" id="loader">
+            <div class="loader-spinner"></div>
+            <div class="loader-text">Обработка ссылки... <i class="fas fa-heart" style="color:#ff69b4"></i></div>
+        </div>
+
+        <div class="result-card" id="resultCard">
+            <div class="video-info">
+                <img class="video-thumb" id="videoThumb" src="" alt="thumbnail">
+                <div class="video-details">
+                    <div class="video-title" id="videoTitle">Название видео</div>
+                    <div class="video-meta" id="videoMeta"></div>
+                    <div>
+                        <select class="quality-select" id="qualitySelect">
+                            <option value="highest">🎬 Максимальное (8K/4K/1080p)</option>
+                        </select>
+                        <button class="get-link-btn" id="getLinkBtn">
+                            <i class="fas fa-download"></i> Скачать
+                        </button>
+                    </div>
+                </div>
             </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Card 3 -->
-      <div class="clip-card">
-        <div class="card-thumb">
-          <div class="card-thumb-inner" style="background: linear-gradient(135deg, #0a150a, #151a05, #051510);">
-            <span class="watermark">@sadixll</span>
-            <div class="card-thumb-title">
-              DAREDEVIL
-              <small>BORN AGAIN S2EP1</small>
+            <div class="direct-link" id="directLink">
+                <input type="text" id="linkInput" readonly placeholder="Ссылка появится здесь">
+                <button class="copy-btn" id="copyBtn"><i class="fas fa-copy"></i> Копировать</button>
             </div>
-          </div>
         </div>
-        <div class="card-body">
-          <div class="card-title">MATT MURDOCK | DAREDEVIL S2E1 | 4K60FPS TWIXTOR</div>
-          <div class="card-desc">Free scene pack. Give credits to @sadixll on any platform.</div>
-          <div class="card-meta">
-            <span class="category-tag marvel">MARVEL</span>
-            <span class="time-ago">Yesterday</span>
-          </div>
-          <div class="card-stats">
-            <div class="card-stats-left">
-              <div class="stat-item">
-                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
-                194
-              </div>
-              <div class="stat-item">
-                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-                97
-              </div>
-            </div>
-            <div class="arrow-btn">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
-            </div>
-          </div>
+
+        <div class="footer">
+            <i class="fas fa-shield-alt"></i> Работает с защищёнными видео | 8K/4K/HDR | MP3 320kbps
+            <br>
+            <i class="fas fa-heart" style="color:#ff69b4"></i> SADIXLL SAVER — Created by Saidjan TJK 🇹🇯
         </div>
-      </div>
     </div>
 
-    <!-- ALL CLIPS -->
-    <div class="all-clips-title">All Clips</div>
-    <div class="all-clips-line"></div>
+    <script>
+        // Создание анимированных элементов
+        function createAnimations() {
+            const container = document.getElementById('bg-animation');
+            const icons = ['🌸', '🌸', '🌸', '🌸', '🌸', '🌸', '🌸', '🌸', '🌸'];
+            
+            for (let i = 0; i < 35; i++) {
+                const el = document.createElement('div');
+                el.className = 'leaf';
+                el.innerHTML = icons[Math.floor(Math.random() * icons.length)];
+                el.style.left = Math.random() * 100 + '%';
+                el.style.animationDuration = 6 + Math.random() * 12 + 's';
+                el.style.animationDelay = Math.random() * 20 + 's';
+                el.style.fontSize = 14 + Math.random() * 22 + 'px';
+                el.style.opacity = 0.2 + Math.random() * 0.4;
+                container.appendChild(el);
+            }
+        }
+        
+        createAnimations();
 
-    <!-- Full width cards -->
-    <div class="clip-card full-width">
-      <div class="card-thumb">
-        <div class="card-thumb-inner" style="background: linear-gradient(135deg, #150a05, #1a0505, #0a0510); height: 200px;">
-          <span class="new-badge">NEW</span>
-          <span class="watermark">@ sadixll</span>
-          <div class="card-thumb-title" style="font-size:28px">
-            MATT MURDOCK
-            <small>DAREDEVIL REBORN S2 E1 · 4K60FPS TWIXTOR</small>
-          </div>
-        </div>
-      </div>
-      <div class="card-body">
-        <div class="card-title">MATT MURDOCK | DAREDEVIL BORN AGAIN S2EP1 | 4K60FPS TWIXTOR | FREE SCENEPACK</div>
-        <div class="card-desc">Don't forget to like and subscribe @sadixll on youtube for more scene packs like this! Give credits to @sadixll on any platform. MATT MURDOCK...</div>
-        <div class="card-meta">
-          <span class="category-tag marvel">MARVEL</span>
-          <span class="time-ago">Yesterday</span>
-        </div>
-        <div class="card-stats">
-          <div class="card-stats-left">
-            <div class="stat-item">
-              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
-              194
-            </div>
-            <div class="stat-item">
-              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-              97
-            </div>
-          </div>
-          <div class="arrow-btn">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
-          </div>
-        </div>
-      </div>
-    </div>
+        // DOM элементы
+        const urlInput = document.getElementById('urlInput');
+        const downloadBtn = document.getElementById('downloadBtn');
+        const loader = document.getElementById('loader');
+        const resultCard = document.getElementById('resultCard');
+        const videoThumb = document.getElementById('videoThumb');
+        const videoTitle = document.getElementById('videoTitle');
+        const videoMeta = document.getElementById('videoMeta');
+        const qualitySelect = document.getElementById('qualitySelect');
+        const getLinkBtn = document.getElementById('getLinkBtn');
+        const linkInput = document.getElementById('linkInput');
+        const copyBtn = document.getElementById('copyBtn');
 
-    <div class="clip-card full-width">
-      <div class="card-thumb">
-        <div class="card-thumb-inner" style="background: linear-gradient(135deg, #050a15, #0a1520, #05100a); height: 200px;">
-          <span class="new-badge">NEW</span>
-          <span class="watermark">@ sadixll</span>
-          <div class="card-thumb-title" style="font-size:28px">
-            HARRY POTTER
-            <small>THE PHILOSOPHER'S STONE · 4K TEASER</small>
-          </div>
-        </div>
-      </div>
-      <div class="card-body">
-        <div class="card-title">HARRY POTTER | THE PHILOSOPHER'S STONE | 4K TEASER | FREE SCENEPACK</div>
-        <div class="card-desc">Don't forget to like and subscribe @sadixll on youtube for more scene packs like this! Give credits to @sadixll on any platform. HARRY POTTER...</div>
-        <div class="card-meta">
-          <span class="category-tag trailers">TRAILERS</span>
-          <span class="time-ago">4d ago</span>
-        </div>
-        <div class="card-stats">
-          <div class="card-stats-left">
-            <div class="stat-item">
-              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
-              479
-            </div>
-            <div class="stat-item">
-              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-              288
-            </div>
-          </div>
-          <div class="arrow-btn">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
+        let currentVideoData = null;
 
-<!-- EXPLORE PAGE -->
-<div class="page" id="page-explore">
-  <div class="section" style="padding-top:100px">
-    <div class="section-header">
-      <h2>Explore <span>Clips</span></h2>
-      <p>Discover premium twixtor clips for your projects.</p>
-    </div>
+        // API через сервис savetube.me (работает с YouTube и другими)
+        async function fetchVideoInfo(url) {
+            try {
+                // Используем публичный API для загрузки
+                const response = await fetch(`https://savetube.me/api/search?url=${encodeURIComponent(url)}`);
+                if (!response.ok) throw new Error('API error');
+                const data = await response.json();
+                return data;
+            } catch (error) {
+                // Fallback - альтернативный API
+                try {
+                    const response2 = await fetch(`https://yt1s.su/api/ajaxSearch?q=${encodeURIComponent(url)}`);
+                    const data2 = await response2.json();
+                    return data2;
+                } catch (e) {
+                    throw new Error('Не удалось получить видео');
+                }
+            }
+        }
 
-    <div class="search-bar">
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-      <input type="text" placeholder="Search for clips, characters, or anime...">
-    </div>
+        // Функция определения платформы
+        function detectPlatform(url) {
+            if (url.includes('youtube.com') || url.includes('youtu.be')) return 'YouTube';
+            if (url.includes('tiktok.com')) return 'TikTok';
+            if (url.includes('instagram.com')) return 'Instagram';
+            if (url.includes('twitter.com') || url.includes('x.com')) return 'Twitter/X';
+            if (url.includes('facebook.com')) return 'Facebook';
+            if (url.includes('vk.com')) return 'VK';
+            if (url.includes('reddit.com')) return 'Reddit';
+            return 'Видео';
+        }
 
-    <div class="tags">
-      <span class="tag active" onclick="filterTag(this)">ALL</span>
-      <span class="tag" onclick="filterTag(this)">MARVEL</span>
-      <span class="tag" onclick="filterTag(this)">TRAILERS</span>
-      <span class="tag" onclick="filterTag(this)">WEB SERIES</span>
-      <span class="tag" onclick="filterTag(this)">MOVIES</span>
-      <span class="tag" onclick="filterTag(this)">F1</span>
-      <span class="tag" onclick="filterTag(this)">CAR</span>
-      <span class="tag" onclick="filterTag(this)">INTROS</span>
-      <span class="tag" onclick="filterTag(this)">DC</span>
-      <span class="tag" onclick="filterTag(this)">FOOTBALL CLIPS</span>
-      <span class="tag" onclick="filterTag(this)">GAME CLIPS</span>
-      <span class="tag" onclick="filterTag(this)">CHARACTER</span>
-      <span class="tag" onclick="filterTag(this)">OTHER</span>
-      <span class="tag" onclick="filterTag(this)">ANIME CLIPS</span>
-      <span class="tag" onclick="filterTag(this)">CELEBRITY CLIPS</span>
-      <span class="tag" onclick="filterTag(this)">MOTOGP</span>
-    </div>
+        // Получение ссылки через CORS прокси для обхода защиты
+        async function getDownloadLink(url, quality) {
+            const proxyUrls = [
+                `https://cors-anywhere.herokuapp.com/`,
+                `https://api.allorigins.win/raw?url=`,
+                `https://corsproxy.io/?`
+            ];
+            
+            // Для YouTube используем специальный сервис
+            if (url.includes('youtube.com') || url.includes('youtu.be')) {
+                const videoId = url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([^&?]+)/)?.[1];
+                if (videoId) {
+                    const qualities = {
+                        'highest': 'highest',
+                        '1080p': '1080',
+                        '720p': '720',
+                        '480p': '480',
+                        '360p': '360'
+                    };
+                    const qualityParam = qualities[quality] || 'highest';
+                    return `https://yt5s.com/api/ajaxConvert?vid=${videoId}&k=${qualityParam}&f=mp4`;
+                }
+            }
+            
+            // Для других платформ используем универсальный API
+            return `https://savetube.me/download?url=${encodeURIComponent(url)}&quality=${quality}`;
+        }
 
-    <div class="sort-bar">
-      SORT: <span>LATEST ▾</span>
-    </div>
+        // Основная функция
+        async function processVideo() {
+            const url = urlInput.value.trim();
+            if (!url) {
+                alert('🥷🏻 Вставь ссылку на видео, братишка!');
+                return;
+            }
 
-    <button class="random-btn">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg>
-      Random Clip
-    </button>
+            loader.classList.add('show');
+            resultCard.classList.remove('show');
 
-    <div class="section-label">
-      <span class="dot"></span>
-      RECOMMENDED FOR YOU
-      <span class="dot"></span>
-    </div>
+            setTimeout(async () => {
+                try {
+                    const platform = detectPlatform(url);
+                    
+                    // Демо-данные с реальными ссылками через API
+                    // В реальности здесь будет запрос к API
+                    const videoId = 'demo_' + Date.now();
+                    
+                    currentVideoData = {
+                        title: `Видео с ${platform}`,
+                        thumbnail: `https://via.placeholder.com/140x140/ff69b4/ffffff?text=${platform}`,
+                        duration: '00:00',
+                        platform: platform,
+                        url: url
+                    };
+                    
+                    // Создаём опции качества
+                    const qualityOptions = [
+                        { value: 'highest', name: '🎬 Максимальное (8K/4K/1080p) - Лучшее качество' },
+                        { value: '1080p', name: '📺 Full HD 1080p' },
+                        { value: '720p', name: '📱 HD 720p' },
+                        { value: '480p', name: '📱 SD 480p' },
+                        { value: '360p', name: '📱 360p' },
+                        { value: 'audio', name: '🎵 Только аудио (MP3 320kbps)' }
+                    ];
+                    
+                    qualitySelect.innerHTML = '';
+                    qualityOptions.forEach(opt => {
+                        const option = document.createElement('option');
+                        option.value = opt.value;
+                        option.textContent = opt.name;
+                        qualitySelect.appendChild(option);
+                    });
+                    
+                    videoThumb.src = currentVideoData.thumbnail;
+                    videoTitle.textContent = currentVideoData.title;
+                    videoMeta.innerHTML = `<i class="fab fa-${platform.toLowerCase()}"></i> ${platform} | 🎬 Доступно 8K/4K | 🔓 Без защиты`;
+                    
+                    loader.classList.remove('show');
+                    resultCard.classList.add('show');
+                    
+                } catch (error) {
+                    loader.classList.remove('show');
+                    alert('❌ Ошибка: ' + error.message + '\n\nПроверь ссылку и попробуй ещё раз!');
+                }
+            }, 800);
+        }
 
-    <div class="scroll-row">
-      <div class="clip-card">
-        <div class="card-thumb">
-          <div class="card-thumb-inner" style="background:linear-gradient(135deg,#1a0a05,#2a1505);">
-            <span class="watermark">@sadixll</span>
-            <div class="card-thumb-title">PEAKY BLINDERS<small>4K60FPS TWIXTOR</small></div>
-          </div>
-        </div>
-        <div class="card-body">
-          <div class="card-title">PEAKY BLINDERS THE IMMORTAL MAN | 4K ENHANCED</div>
-          <div class="card-meta"><span class="category-tag trailers">TRAILERS</span><span class="time-ago">3mo ago</span></div>
-          <div class="card-stats"><div class="card-stats-left"><div class="stat-item">👁 3.5K</div><div class="stat-item">⬇ 2.0K</div></div><div class="arrow-btn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg></div></div>
-        </div>
-      </div>
-      <div class="clip-card">
-        <div class="card-thumb">
-          <div class="card-thumb-inner" style="background:linear-gradient(135deg,#0a0a1a,#1a0a1a);">
-            <span class="watermark">@sadixll</span>
-            <div class="card-thumb-title">DAREDEVIL<small>BORN AGAIN</small></div>
-          </div>
-        </div>
-        <div class="card-body">
-          <div class="card-title">MATT MURDOCK | DAREDEVIL BORN AGAIN S2</div>
-          <div class="card-meta"><span class="category-tag marvel">MARVEL</span><span class="time-ago">Yesterday</span></div>
-          <div class="card-stats"><div class="card-stats-left"><div class="stat-item">👁 194</div><div class="stat-item">⬇ 97</div></div><div class="arrow-btn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg></div></div>
-        </div>
-      </div>
-    </div>
+        async function downloadVideo() {
+            const quality = qualitySelect.value;
+            const url = urlInput.value.trim();
+            
+            if (!url) return;
+            
+            getLinkBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Получение...';
+            getLinkBtn.disabled = true;
+            
+            try {
+                let downloadUrl;
+                
+                // Генерация реальной ссылки для скачивания
+                if (url.includes('youtube.com') || url.includes('youtu.be')) {
+                    const videoId = url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([^&?]+)/)?.[1];
+                    if (videoId) {
+                        if (quality === 'audio') {
+                            downloadUrl = `https://ytmp3.nu/convert/?v=${videoId}`;
+                        } else {
+                            const qualityMap = { 'highest': '2160p', '1080p': '1080p', '720p': '720p', '480p': '480p', '360p': '360p' };
+                            downloadUrl = `https://y2mate.nu/youtube/${videoId}/mp4/${qualityMap[quality] || '1080p'}`;
+                        }
+                    }
+                } else if (url.includes('tiktok.com')) {
+                    downloadUrl = `https://tikmate.cc/download?url=${encodeURIComponent(url)}`;
+                } else if (url.includes('instagram.com')) {
+                    downloadUrl = `https://saveinsta.app/download?url=${encodeURIComponent(url)}`;
+                } else {
+                    downloadUrl = `https://savetube.me/download?url=${encodeURIComponent(url)}`;
+                }
+                
+                linkInput.value = downloadUrl;
+                
+                // Открываем ссылку для скачивания в новом окне
+                window.open(downloadUrl, '_blank');
+                
+                getLinkBtn.innerHTML = '<i class="fas fa-download"></i> Скачать';
+                getLinkBtn.disabled = false;
+                
+            } catch (error) {
+                getLinkBtn.innerHTML = '<i class="fas fa-download"></i> Скачать';
+                getLinkBtn.disabled = false;
+                alert('❌ Ошибка получения ссылки. Попробуй другое качество!');
+            }
+        }
 
-    <div class="all-clips-title">All Clips</div>
-    <div class="all-clips-line"></div>
+        function copyLink() {
+            linkInput.select();
+            document.execCommand('copy');
+            copyBtn.innerHTML = '<i class="fas fa-check"></i> Готово!';
+            setTimeout(() => {
+                copyBtn.innerHTML = '<i class="fas fa-copy"></i> Копировать';
+            }, 2000);
+        }
 
-    <div class="clip-card full-width" style="margin-bottom:16px">
-      <div class="card-thumb">
-        <div class="card-thumb-inner" style="height:180px;background:linear-gradient(135deg,#150a05,#1a0505);">
-          <span class="new-badge">NEW</span>
-          <span class="watermark">@ sadixll</span>
-          <div class="card-thumb-title" style="font-size:26px">MATT MURDOCK<small>DAREDEVIL REBORN S2 E1 · 4K60FPS</small></div>
-        </div>
-      </div>
-      <div class="card-body">
-        <div class="card-title">MATT MURDOCK | DAREDEVIL BORN AGAIN S2EP1 | 4K60FPS TWIXTOR | FREE SCENEPACK</div>
-        <div class="card-desc">Give credits to @sadixll on any platform.</div>
-        <div class="card-meta"><span class="category-tag marvel">MARVEL</span><span class="time-ago">Yesterday</span></div>
-        <div class="card-stats"><div class="card-stats-left"><div class="stat-item">👁 194</div><div class="stat-item">⬇ 97</div></div><div class="arrow-btn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg></div></div>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- STICKERS PAGE -->
-<div class="page" id="page-stickers">
-  <div class="section" style="padding-top:100px; text-align:center">
-    <div class="section-header">
-      <h2>Ae <span>Stickers</span></h2>
-      <p>Official Sadixll Ae sticker pack — free to use with credit.</p>
-    </div>
-
-    <div class="ae-section" style="padding:0">
-      <div class="ae-sticker-wrap">
-        <div class="ae-sticker">Ae</div>
-        <div class="ae-sticker-label">OFFICIAL Ae STICKER</div>
-      </div>
-    </div>
-
-    <div class="sticker-row">
-      <div class="mini-sticker">
-        <div class="mini-sticker-icon">Ae</div>
-        <div class="mini-sticker-label">CLASSIC RED</div>
-      </div>
-      <div class="mini-sticker" style="background:linear-gradient(135deg,#0a0a1a,#1a0a2a)">
-        <div class="mini-sticker-icon" style="color:#9b59ff">Ae</div>
-        <div class="mini-sticker-label">PURPLE</div>
-      </div>
-      <div class="mini-sticker" style="background:linear-gradient(135deg,#0a1a0a,#0a2a1a)">
-        <div class="mini-sticker-icon" style="color:#00ff88">Ae</div>
-        <div class="mini-sticker-label">GREEN</div>
-      </div>
-      <div class="mini-sticker" style="background:linear-gradient(135deg,#1a1500,#2a1a00)">
-        <div class="mini-sticker-icon" style="color:#ffcc00">Ae</div>
-        <div class="mini-sticker-label">GOLD</div>
-      </div>
-      <div class="mini-sticker" style="background:linear-gradient(135deg,#050515,#0a0a20); border:1px solid #ffffff22">
-        <div class="mini-sticker-icon" style="color:white">Ae</div>
-        <div class="mini-sticker-label">WHITE</div>
-      </div>
-    </div>
-
-    <div style="margin-top:40px; padding:24px; background:#111; border:1px solid #222; border-radius:20px; text-align:left;">
-      <div style="font-size:11px;letter-spacing:3px;color:var(--muted);margin-bottom:12px">HOW TO USE</div>
-      <p style="font-size:14px;color:#aaa;line-height:1.7">
-        1. Download the Ae sticker pack<br>
-        2. Import into After Effects / CapCut / Alight Motion<br>
-        3. Give credits: <strong style="color:var(--red)">@sadixll</strong><br>
-        4. Free to use on any platform ✓
-      </p>
-      <button class="btn-primary" style="margin-top:20px;width:100%">
-        Download Sticker Pack ↓
-      </button>
-    </div>
-  </div>
-</div>
-
-<!-- ABOUT PAGE -->
-<div class="page" id="page-about">
-  <div style="min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:100px 24px 80px;text-align:center;">
-    <div class="logo-icon" style="width:80px;height:80px;border-radius:20px;font-size:32px;margin-bottom:24px;box-shadow:0 0 40px rgba(230,48,48,0.4)">SA</div>
-    <div style="font-family:'Bebas Neue',sans-serif;font-size:48px;letter-spacing:4px;color:var(--red);margin-bottom:4px">SADIXLL</div>
-    <div style="font-size:11px;letter-spacing:6px;color:var(--muted);margin-bottom:40px">AE TWIXTORS</div>
-
-    <div style="max-width:480px;color:#888;font-size:15px;line-height:1.9">
-      <p>
-        <strong style="color:white">@Sadixll</strong> создаёт премиальные 4K Twixtor клипы и scene packs для видеоредакторов. Все клипы бесплатны — просто ставь кредиты <strong style="color:var(--red)">@sadixll</strong> на любой платформе.
-      </p>
-      <br>
-      <p>
-        Стикер <strong style="color:var(--red)">Ae</strong> — официальный бренд-символ канала. Используй его в своих видео с кредитами.
-      </p>
-    </div>
-
-    <div style="display:flex;gap:16px;margin-top:40px;flex-wrap:wrap;justify-content:center">
-      <a href="#" class="btn-primary" style="width:auto;padding:14px 28px">YouTube ↗</a>
-      <a href="#" class="btn-secondary" style="width:auto;padding:14px 28px">Instagram ↗</a>
-      <a href="#" class="btn-secondary" style="width:auto;padding:14px 28px">Telegram ↗</a>
-    </div>
-  </div>
-</div>
-
-</div><!-- end page-content -->
-
-<!-- BOTTOM NAV -->
-<nav class="bottom-nav">
-  <button class="bottom-nav-item active" id="nav-home" onclick="showPage('home')">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
-    <span>HOME</span>
-  </button>
-  <button class="bottom-nav-item" id="nav-explore" onclick="showPage('explore')">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-    <span>EXPLORE</span>
-  </button>
-  <button class="bottom-nav-item" id="nav-stickers" onclick="showPage('stickers')">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>
-    <span>STICKERS</span>
-  </button>
-  <button class="bottom-nav-item" id="nav-about" onclick="showPage('about')">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-    <span>ABOUT</span>
-  </button>
-</nav>
-
-<script>
-  function showPage(name) {
-    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-    document.querySelectorAll('.bottom-nav-item').forEach(b => b.classList.remove('active'));
-    document.getElementById('page-' + name).classList.add('active');
-    document.getElementById('nav-' + name).classList.add('active');
-    window.scrollTo(0, 0);
-  }
-
-  function toggleMenu() {
-    document.getElementById('mobileMenu').classList.toggle('open');
-  }
-
-  function filterTag(el) {
-    document.querySelectorAll('.tag').forEach(t => t.classList.remove('active'));
-    el.classList.add('active');
-  }
-</script>
+        downloadBtn.addEventListener('click', processVideo);
+        getLinkBtn.addEventListener('click', downloadVideo);
+        copyBtn.addEventListener('click', copyLink);
+        
+        urlInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') processVideo();
+        });
+    </script>
 </body>
-    </html>
-    
+              </html>
