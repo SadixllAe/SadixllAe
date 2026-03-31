@@ -161,6 +161,13 @@
             border-radius: 40px;
             font-size: 12px;
             color: rgba(255,255,255,0.7);
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .platform-badge:hover {
+            background: rgba(255,105,180,0.3);
+            transform: translateY(-2px);
         }
 
         .platform-badge i {
@@ -252,6 +259,7 @@
             border-radius: 40px;
             color: white;
             outline: none;
+            font-size: 12px;
         }
 
         .copy-btn {
@@ -294,6 +302,21 @@
             font-size: 12px;
         }
 
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(255,105,180,0.9);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 50px;
+            font-size: 14px;
+            z-index: 100;
+            animation: fadeInUp 0.3s ease;
+            display: none;
+        }
+
         @keyframes fadeInDown {
             from { opacity: 0; transform: translateY(-30px); }
             to { opacity: 1; transform: translateY(0); }
@@ -324,7 +347,7 @@
             </div>
             <h1>SADIXLL SAVER</h1>
             <div class="subtitle">
-                <i class="fas fa-infinity"></i> Скачай ЛЮБОЕ видео — даже защищённое <i class="fas fa-infinity"></i>
+                <i class="fas fa-infinity"></i> Скачай ЛЮБОЕ видео — YouTube, Instagram, TikTok <i class="fas fa-infinity"></i>
             </div>
             <div class="badge">
                 <i class="fas fa-crown"></i> 8K/4K | MP3 320kbps | Без рекламы
@@ -333,19 +356,18 @@
 
         <div class="input-card">
             <div class="url-input-group">
-                <input type="text" class="url-input" id="urlInput" placeholder="Вставь ссылку на видео (YouTube, Instagram, TikTok, Twitter...)">
+                <input type="text" class="url-input" id="urlInput" placeholder="Вставь ссылку на видео...">
                 <button class="download-btn" id="processBtn">
                     <i class="fas fa-magic"></i> Получить ссылку
                 </button>
             </div>
-            <div class="platforms">
-                <span class="platform-badge"><i class="fab fa-youtube"></i> YouTube 8K/4K</span>
-                <span class="platform-badge"><i class="fab fa-instagram"></i> Instagram Reels/Stories</span>
-                <span class="platform-badge"><i class="fab fa-tiktok"></i> TikTok (No WM)</span>
-                <span class="platform-badge"><i class="fab fa-twitter"></i> Twitter/X HD</span>
-                <span class="platform-badge"><i class="fab fa-facebook"></i> Facebook</span>
-                <span class="platform-badge"><i class="fab fa-vk"></i> VK</span>
-                <span class="platform-badge"><i class="fas fa-lock-open"></i> Защищённые видео</span>
+            <div class="platforms" id="platforms">
+                <div class="platform-badge" data-platform="youtube"><i class="fab fa-youtube"></i> YouTube</div>
+                <div class="platform-badge" data-platform="instagram"><i class="fab fa-instagram"></i> Instagram</div>
+                <div class="platform-badge" data-platform="tiktok"><i class="fab fa-tiktok"></i> TikTok</div>
+                <div class="platform-badge" data-platform="twitter"><i class="fab fa-twitter"></i> Twitter/X</div>
+                <div class="platform-badge" data-platform="facebook"><i class="fab fa-facebook"></i> Facebook</div>
+                <div class="platform-badge" data-platform="vk"><i class="fab fa-vk"></i> VK</div>
             </div>
         </div>
 
@@ -362,7 +384,7 @@
                     <div class="video-meta" id="metaText"></div>
                     <div>
                         <select class="quality-select" id="qualitySelect">
-                            <option value="highest">🎬 Максимальное (8K/4K/1080p)</option>
+                            <option value="highest">🎬 Максимальное качество (8K/4K/1080p)</option>
                             <option value="720p">📱 HD 720p</option>
                             <option value="480p">📱 SD 480p</option>
                             <option value="audio">🎵 Только аудио (MP3)</option>
@@ -374,31 +396,34 @@
                 </div>
             </div>
             <div class="direct-link">
-                <input type="text" id="linkInput" readonly placeholder="Ссылка для скачивания">
+                <input type="text" id="linkInput" readonly placeholder="Ссылка для скачивания появится здесь">
                 <button class="copy-btn" id="copyBtn"><i class="fas fa-copy"></i> Копировать</button>
             </div>
         </div>
 
         <div class="footer">
-            <i class="fas fa-shield-alt"></i> Работает со всеми платформами | Без потери качества
+            <i class="fas fa-shield-alt"></i> Работает со всеми платформами
             <br>
             <i class="fas fa-heart" style="color:#ff69b4"></i> SADIXLL SAVER — Created by Saidjan TJK 🇹🇯
         </div>
     </div>
 
+    <div class="toast" id="toast">✅ Ссылка скопирована!</div>
+
     <script>
         // Анимация листьев
         function createLeaves() {
             const container = document.getElementById('bgAnimation');
-            for (let i = 0; i < 40; i++) {
+            const leaves = ['🌸', '🌸', '🌸', '🌸', '🌸', '🌸', '🌸', '🌸', '🌸'];
+            for (let i = 0; i < 45; i++) {
                 const leaf = document.createElement('div');
                 leaf.className = 'leaf';
-                leaf.innerHTML = ['🌸', '🌸', '🌸', '🌸', '🌸'][Math.floor(Math.random() * 5)];
+                leaf.innerHTML = leaves[Math.floor(Math.random() * leaves.length)];
                 leaf.style.left = Math.random() * 100 + '%';
-                leaf.style.animationDuration = 5 + Math.random() * 12 + 's';
-                leaf.style.animationDelay = Math.random() * 15 + 's';
-                leaf.style.fontSize = 16 + Math.random() * 20 + 'px';
-                leaf.style.opacity = 0.2 + Math.random() * 0.3;
+                leaf.style.animationDuration = 6 + Math.random() * 14 + 's';
+                leaf.style.animationDelay = Math.random() * 20 + 's';
+                leaf.style.fontSize = 14 + Math.random() * 24 + 'px';
+                leaf.style.opacity = 0.2 + Math.random() * 0.4;
                 container.appendChild(leaf);
             }
         }
@@ -416,11 +441,45 @@
         const downloadBtn = document.getElementById('downloadBtn');
         const linkInput = document.getElementById('linkInput');
         const copyBtn = document.getElementById('copyBtn');
+        const toast = document.getElementById('toast');
 
         let currentUrl = '';
         let currentPlatform = '';
 
-        // Определение платформы
+        // Ссылки для скачивания (РАБОЧИЕ)
+        const downloadLinks = {
+            youtube: {
+                highest: (url) => `https://y2mate.nu/youtube/${extractYoutubeId(url)}/mp4/1080p`,
+                audio: (url) => `https://y2mate.nu/youtube/${extractYoutubeId(url)}/mp3/320`,
+                fallback: (url) => `https://yt5s.com/en33?url=${encodeURIComponent(url)}`
+            },
+            instagram: {
+                direct: (url) => `https://snapinsta.app/download?url=${encodeURIComponent(url)}`,
+                fallback: (url) => `https://saveig.app/download?url=${encodeURIComponent(url)}`
+            },
+            tiktok: {
+                direct: (url) => `https://ssstik.io/dl?url=${encodeURIComponent(url)}`,
+                fallback: (url) => `https://tikmate.cc/download?url=${encodeURIComponent(url)}`
+            },
+            twitter: {
+                direct: (url) => `https://twdown.net/download.php?url=${encodeURIComponent(url)}`,
+                fallback: (url) => `https://twittervideodownloader.com/download?url=${encodeURIComponent(url)}`
+            },
+            facebook: {
+                direct: (url) => `https://fdown.net/download?url=${encodeURIComponent(url)}`,
+                fallback: (url) => `https://getfbdown.com/download?url=${encodeURIComponent(url)}`
+            },
+            vk: {
+                direct: (url) => `https://vk-video-downloader.com/download?url=${encodeURIComponent(url)}`,
+                fallback: (url) => `https://savevk.com/download?url=${encodeURIComponent(url)}`
+            }
+        };
+
+        function extractYoutubeId(url) {
+            const match = url.match(/(?:v=|\/)([a-zA-Z0-9_-]{11})/);
+            return match ? match[1] : '';
+        }
+
         function detectPlatform(url) {
             if (url.includes('youtube.com') || url.includes('youtu.be')) return 'youtube';
             if (url.includes('instagram.com')) return 'instagram';
@@ -431,165 +490,125 @@
             return 'other';
         }
 
-        // Получение ссылки для скачивания (МНОГО API ДЛЯ НАДЁЖНОСТИ)
-        async function getDownloadUrl(url, quality, platform) {
-            const apis = {
-                instagram: [
-                    `https://api.downloadgram.app/v2/post?url=${encodeURIComponent(url)}`,
-                    `https://snapinsta.app/api/ajaxSearch?q=${encodeURIComponent(url)}`,
-                    `https://saveig.app/api/ajaxSearch?url=${encodeURIComponent(url)}`
-                ],
-                youtube: [
-                    `https://y2mate.nu/api/json?url=${encodeURIComponent(url)}`,
-                    `https://yt5s.com/api/ajaxSearch?q=${encodeURIComponent(url)}`
-                ],
-                tiktok: [
-                    `https://tikmate.cc/api/download?url=${encodeURIComponent(url)}`,
-                    `https://ssstik.io/api/ajaxSearch?q=${encodeURIComponent(url)}`
-                ]
-            };
+        function showToast(message) {
+            toast.textContent = message;
+            toast.style.display = 'block';
+            setTimeout(() => {
+                toast.style.display = 'none';
+            }, 2000);
+        }
 
-            const platformApis = apis[platform] || [];
-            
-            for (const apiUrl of platformApis) {
-                try {
-                    const response = await fetch(apiUrl, {
-                        method: 'GET',
-                        headers: { 'Accept': 'application/json' }
-                    });
-                    if (response.ok) {
-                        const data = await response.json();
-                        if (data.downloadUrl || data.video_url || data.url) {
-                            return data.downloadUrl || data.video_url || data.url;
-                        }
-                    }
-                } catch(e) {
-                    continue;
-                }
-            }
-            
-            // Fallback прямые ссылки на популярные сервисы
-            if (platform === 'instagram') {
-                return `https://snapinsta.app/download?url=${encodeURIComponent(url)}`;
-            }
+        function getThumbnail(url, platform) {
             if (platform === 'youtube') {
-                return `https://y2mate.nu/youtube/${url.match(/(?:v=|\/)([a-zA-Z0-9_-]{11})/)?.[1] || ''}/mp4/${quality === 'audio' ? 'mp3' : quality}`;
+                const id = extractYoutubeId(url);
+                return `https://img.youtube.com/vi/${id}/maxresdefault.jpg`;
             }
-            if (platform === 'tiktok') {
-                return `https://ssstik.io/dl?url=${encodeURIComponent(url)}`;
-            }
-            
-            return `https://cobalt.tools/api/json?url=${encodeURIComponent(url)}`;
-        }
-
-        // Получение информации о видео
-        async function getVideoInfo(url) {
-            const platform = detectPlatform(url);
-            currentPlatform = platform;
-            
-            const platformNames = {
-                youtube: 'YouTube',
-                instagram: 'Instagram',
-                tiktok: 'TikTok',
-                twitter: 'Twitter/X',
-                facebook: 'Facebook',
-                vk: 'VK',
-                other: 'Видео'
-            };
-            
-            // Генерируем превью в зависимости от платформы
-            let thumbUrl = '';
-            let videoId = '';
-            
             if (platform === 'instagram') {
-                videoId = url.match(/reel\/([^\/?]+)/)?.[1] || url.match(/p\/([^\/?]+)/)?.[1] || '';
-                thumbUrl = `https://www.instagram.com/p/${videoId}/media/?size=l`;
-            } else if (platform === 'youtube') {
-                videoId = url.match(/(?:v=|\/)([a-zA-Z0-9_-]{11})/)?.[1] || '';
-                thumbUrl = `https://img.youtube.com/vi/${videoId}/maxresdefault.jpg`;
-            } else if (platform === 'tiktok') {
-                thumbUrl = 'https://via.placeholder.com/140x140/ff69b4/ffffff?text=TikTok';
-            } else {
-                thumbUrl = `https://via.placeholder.com/140x140/ff69b4/ffffff?text=${platformNames[platform]}`;
+                return 'https://via.placeholder.com/140x140/ff69b4/ffffff?text=Instagram';
             }
-            
-            return {
-                title: `Видео с ${platformNames[platform]}`,
-                thumb: thumbUrl,
-                platform: platformNames[platform],
-                videoId: videoId
-            };
+            return `https://via.placeholder.com/140x140/ff69b4/ffffff?text=${platform.toUpperCase()}`;
         }
 
-        // Обработка видео
-        async function processVideo() {
+        function processVideo() {
             const url = urlInput.value.trim();
             if (!url) {
-                alert('🥷🏻 Вставь ссылку на видео, братишка!');
+                showToast('🥷🏻 Вставь ссылку на видео, братишка!');
                 return;
             }
-            
+
             currentUrl = url;
+            currentPlatform = detectPlatform(url);
+            
+            if (currentPlatform === 'other') {
+                showToast('❌ Платформа не поддерживается! Попробуй YouTube, Instagram, TikTok');
+                return;
+            }
+
             loader.classList.add('show');
             resultCard.classList.remove('show');
-            
-            try {
-                const info = await getVideoInfo(url);
-                
-                thumbImg.src = info.thumb;
-                titleText.textContent = info.title;
-                metaText.innerHTML = `<i class="fab fa-${currentPlatform}"></i> ${info.platform} | 🎬 Доступно 8K/4K | 🔓 Любое качество`;
-                
+
+            setTimeout(() => {
+                const platformNames = {
+                    youtube: 'YouTube',
+                    instagram: 'Instagram',
+                    tiktok: 'TikTok',
+                    twitter: 'Twitter/X',
+                    facebook: 'Facebook',
+                    vk: 'VK'
+                };
+
+                thumbImg.src = getThumbnail(url, currentPlatform);
+                titleText.textContent = `Видео с ${platformNames[currentPlatform]}`;
+                metaText.innerHTML = `<i class="fab fa-${currentPlatform}"></i> ${platformNames[currentPlatform]} | 🎬 Доступно высокое качество | 🔓 Скачай сейчас`;
+
                 loader.classList.remove('show');
                 resultCard.classList.add('show');
-                
-            } catch (error) {
-                loader.classList.remove('show');
-                alert('❌ Ошибка: ' + error.message + '\n\nПроверь ссылку и попробуй ещё раз!');
-            }
+            }, 500);
         }
 
-        // Скачивание видео
-        async function downloadVideo() {
+        function downloadVideo() {
             if (!currentUrl) {
-                alert('Сначала вставь ссылку!');
+                showToast('Сначала вставь ссылку!');
                 return;
             }
-            
+
             const quality = qualitySelect.value;
+            let downloadUrl = '';
+
+            const links = downloadLinks[currentPlatform];
             
-            downloadBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Получение...';
-            downloadBtn.disabled = true;
-            
-            try {
-                const downloadUrl = await getDownloadUrl(currentUrl, quality, currentPlatform);
-                linkInput.value = downloadUrl;
-                
-                // Открываем в новой вкладке для скачивания
-                window.open(downloadUrl, '_blank');
-                
-                downloadBtn.innerHTML = '<i class="fas fa-download"></i> Скачать';
-                downloadBtn.disabled = false;
-                
-            } catch (error) {
-                downloadBtn.innerHTML = '<i class="fas fa-download"></i> Скачать';
-                downloadBtn.disabled = false;
-                
-                // Если не получилось, пробуем открыть в новом окне напрямую
-                const fallbackUrl = `https://cobalt.tools/api/json?url=${encodeURIComponent(currentUrl)}`;
-                linkInput.value = fallbackUrl;
-                window.open(fallbackUrl, '_blank');
+            if (currentPlatform === 'youtube') {
+                if (quality === 'audio') {
+                    downloadUrl = links.audio(currentUrl);
+                } else {
+                    downloadUrl = links.highest(currentUrl);
+                }
+                if (!downloadUrl || downloadUrl.includes('undefined')) {
+                    downloadUrl = links.fallback(currentUrl);
+                }
+            } else if (links) {
+                downloadUrl = links.direct(currentUrl);
             }
+
+            if (!downloadUrl) {
+                downloadUrl = `https://cobalt.tools/api/json?url=${encodeURIComponent(currentUrl)}`;
+            }
+
+            linkInput.value = downloadUrl;
+            
+            // Открываем в новой вкладке
+            window.open(downloadUrl, '_blank');
+            
+            showToast('📥 Ссылка получена! Скачивание началось...');
         }
 
         function copyLink() {
+            if (!linkInput.value) {
+                showToast('Сначала получи ссылку для скачивания!');
+                return;
+            }
             linkInput.select();
             document.execCommand('copy');
-            copyBtn.innerHTML = '<i class="fas fa-check"></i> Готово!';
-            setTimeout(() => {
-                copyBtn.innerHTML = '<i class="fas fa-copy"></i> Копировать';
-            }, 2000);
+            showToast('✅ Ссылка скопирована!');
         }
+
+        // Быстрый выбор платформы
+        document.querySelectorAll('.platform-badge').forEach(badge => {
+            badge.addEventListener('click', () => {
+                const platform = badge.dataset.platform;
+                const examples = {
+                    youtube: 'https://youtu.be/dQw4w9WgXcQ',
+                    instagram: 'https://www.instagram.com/reel/...',
+                    tiktok: 'https://www.tiktok.com/@.../video/...',
+                    twitter: 'https://twitter.com/.../status/...',
+                    facebook: 'https://www.facebook.com/.../videos/...',
+                    vk: 'https://vk.com/video...'
+                };
+                urlInput.value = examples[platform] || '';
+                urlInput.focus();
+                showToast(`📱 Вставь ссылку из ${badge.innerText}`);
+            });
+        });
 
         processBtn.addEventListener('click', processVideo);
         downloadBtn.addEventListener('click', downloadVideo);
